@@ -16,7 +16,7 @@ namespace ToDoWebAPI.Controllers
     [ApiController]
     public class DepartmentController : ControllerBase
     {
-        //Dependency injection işlemi?
+        //Dependency injection işlemi
         private readonly IConfiguration _configuration;
         private readonly ILogger<DepartmentController> _logger;
         public DepartmentController(IConfiguration configuration,ILogger<DepartmentController> logger)
@@ -25,12 +25,7 @@ namespace ToDoWebAPI.Controllers
             _logger = logger;
         }
 
-        //public DepartmentController(ILogger<DepartmentController> logger)
-        //{
-        //    _logger = logger;
-        //}
-
-        //entity framework ile vt den veri çekilmesi
+        //vt den veri çekilmesi
         [HttpGet]//get isteği ile tüm verilerin dönderilmesi.
         public JsonResult Get()
         {
