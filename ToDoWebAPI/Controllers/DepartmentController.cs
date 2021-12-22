@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -17,15 +18,23 @@ namespace ToDoWebAPI.Controllers
     {
         //Dependency injection işlemi?
         private readonly IConfiguration _configuration;
-        public DepartmentController(IConfiguration configuration)
+        private readonly ILogger<DepartmentController> _logger;
+        public DepartmentController(IConfiguration configuration,ILogger<DepartmentController> logger)
         {
             _configuration = configuration;
+            _logger = logger;
         }
+
+        //public DepartmentController(ILogger<DepartmentController> logger)
+        //{
+        //    _logger = logger;
+        //}
 
         //entity framework ile vt den veri çekilmesi
         [HttpGet]//get isteği ile tüm verilerin dönderilmesi.
         public JsonResult Get()
         {
+            
             string query = @"select DepartmentId,DepartmentName from Department";
 
             DataTable table = new DataTable();
@@ -43,6 +52,8 @@ namespace ToDoWebAPI.Controllers
                     mycon.Close();
                 }
             }
+            
+            _logger.LogInformation("<<Get requesti gönderildi>>");
             return new JsonResult(table);
         }
 
@@ -67,6 +78,7 @@ namespace ToDoWebAPI.Controllers
                     mycon.Close();
                 }
             }
+            _logger.LogInformation(table.ToString()+" " +id+ " <<id ile get requesti gönderildi>>");
             return new JsonResult(table);
         }
 
@@ -92,6 +104,8 @@ namespace ToDoWebAPI.Controllers
                     mycon.Close();
                 }
             }
+            _logger.LogInformation(dep.DepartmentId+" "+dep.DepartmentName + " <<post requesti gönderildi>>");
+
             return new JsonResult("Added Successfully");
         }
 
@@ -121,6 +135,8 @@ namespace ToDoWebAPI.Controllers
                     mycon.Close();
                 }
             }
+            _logger.LogInformation(dep.DepartmentId+" "+dep.DepartmentName + " <<put requesti gönderildi>>");
+
             return new JsonResult("Updated Successfully");
         }
 
@@ -147,6 +163,8 @@ namespace ToDoWebAPI.Controllers
                     mycon.Close();
                 }
             }
+            _logger.LogInformation(table.ToString() + " " + id + " <<id ile delete requesti gönderildi>>");
+
             return new JsonResult("Deleted Successfully");
         }
         }
